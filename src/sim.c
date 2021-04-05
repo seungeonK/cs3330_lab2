@@ -57,6 +57,7 @@ int dcd_se_imm;      /* decoded sign-extended immediate value */
 uint32_t inst;       /* machine instruction */
 
 int64_t mult_temp;
+uint32_t virtualAddress;
 
 uint32_t sign_extend_h2w(uint16_t c)
 {
@@ -271,14 +272,13 @@ void execute()
         // 16- 'offset' is sign-extended and
         // added to the contents of general register 'base'
         // to form a virtual address
-        case OP_SW:{
-            uint32_t virtualAddress = dcd_se_imm + CURRENT_STATE.REGS[dcd_rs];
-            mem_write_32(virtualAddress, CURRENT_STATE.REGS[dcd_rt]);
+        case OP_SW:
+            virtualAddress = dcd_se_imm + CURRENT_STATE.REGS[dcd_rs];
+            mem_write_32(virtualAddress, (int)CURRENT_STATE.REGS[dcd_rt]);
             // if either of the two least-significant bits of the effective address are non-zero,
             // and address error exception occurs
 
             break;
-        }
         }
 
 
