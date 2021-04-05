@@ -218,7 +218,7 @@ void execute()
         // if($s > 0) -> pc += i << 2
         case OP_BGTZ:
             if(CURRENT_STATE.REGS[dcd_rs] > 0)
-                NEXT_STATE.PC = (int32_t)CURRENT_STATE.PC + (dcd_se_imm << 2);
+                NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
             break;
         // load upper immediate
         // the 16-bit 'immediate' is shifted left 16 bits
