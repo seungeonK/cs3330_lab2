@@ -242,6 +242,7 @@ void execute()
             NEXT_STATE.REGS[dcd_rt] = (uint32_t)(mem_read_32(CURRENT_STATE.REGS[dcd_rs] + dcd_se_imm) & 0xFF);
             break;
         // load word
+        
         // $t = MEM [$s + i]:4
         // since it's dealing with the word, we don't have to manipulate it
         case OP_LW:
