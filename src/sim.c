@@ -67,7 +67,14 @@ uint32_t sign_extend_b2w(uint8_t c)
 {
     return (c & 0x80) ? (c | 0xffffff80) : c;
 }
-
+uint32_t zero_extend_b2w(uint8_t c)
+{
+    return ((uint32_t) c);
+}
+uint32_t zero_extend_h2w(uint16_t c)
+{
+    return ((uint32_t) c);
+}
 void fetch()
 {
     /* fetch the 4 bytes of the current instruction */
@@ -233,7 +240,7 @@ void execute()
         // offset is sign-extened 16 bits
         // (int32_t) makes the 32bit but signed
         case OP_LB:
-            NEXT_STATE.REGS[dcd_rt] = (int32_t)(mem_read_32(CURRENT_STATE.REGS[dcd_rs] + (dcd_se_imm)) & 0xFF);
+            NEXT_STATE.REGS[dcd_rt] = sign_extend_b2w((mem_read_32(CURRENT_STATE.REGS[dcd_rs] + (dcd_se_imm)) & 0xFF));
             break;
         // load byte unsigned
         // 0xFF makes the value a byte
