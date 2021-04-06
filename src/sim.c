@@ -266,7 +266,8 @@ void execute()
         // unconditionally jumps to this calculated address with a delay of one instruction
         // pc += i << 2
         case OP_J:
-            NEXT_STATE.PC = (dcd_target << 2) | (CURRENT_STATE.PC & 0xF0000000);
+            NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_target << 2);
+            // NEXT_STATE.PC = (dcd_target << 2) | (CURRENT_STATE.PC & 0xF0000000);
             break;
         // branch on equal
         // if($s == $t) -> pc += i << 2
