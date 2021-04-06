@@ -231,7 +231,7 @@ void execute()
                 // else{ $1 = 0; }
                 case SUBOP_SLTU:
                     // $d = ($s < $t)
-                    if ((uint32_t)CURRENT_STATE.REGS[dcd_rs] < (uint32_t)CURRENT_STATE.REGS[dcd_rt]){
+                    if (CURRENT_STATE.REGS[dcd_rs] < CURRENT_STATE.REGS[dcd_rt]){
                         NEXT_STATE.REGS[dcd_rd] = 1;
                     } else{
                         NEXT_STATE.REGS[dcd_rd] = 0;
