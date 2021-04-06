@@ -44,6 +44,21 @@
 #define OP_SB 0x28
 #define OP_SW 0x2B
 
+/*-------Bonus---------*/
+#define OP_SLTI 0x0A
+#define OP_SLTIU 0x0B
+#define SUBOP_AND 0x24
+#define SUBOP_OR 0x25
+#define SUBOP_XOR 0x26
+#define SUBOP_NOR 0x27
+#define SUBOP_SLT 0x2A
+#define SUBOP_MFLO 0x12
+#define SUBOP_MTHI 0x11
+#define SUBOP_DIV 0x1a
+#define OP_BLEZ 0x06
+#define OP_BGEZ 0x01
+/*-------10 additional instructions---------*/
+
 
 uint32_t dcd_op;     /* decoded opcode */
 uint32_t dcd_rs;     /* decoded rs operand */
@@ -116,6 +131,54 @@ void execute()
                     if (CURRENT_STATE.REGS[2] == 10)
                         RUN_BIT = 0;
                     break;
+                /* ----------BONUS----------*/
+                case SUBOP_AND:
+                    NEXT_STATE.REGS[dcd_rd]= CURRENT_STATE.REGS[dcd_rs] & CURRENT_STATE.REGS[dcd_rt];
+                    break;
+                
+                case SUBOP_OR:
+                    NEXT_STATE.REGS[dcd_rd] = CURRENT_STATE.REGS[dcd_rs] | CURRENT_STATE.REGS[dcd_rt];
+		            break;
+                
+                case SUBOP_XOR:
+		            NEXT_STATE.REGS[dcd_rd] = CURRENT_STATE.REGS[dcd_rs] ^ CURRENT_STATE.REGS[dcd_rt];
+		            break;
+
+                case SUBOP_NOR:
+		            NEXT_STATE.REGS[dcd_rd] = ~(CURRENT_STATE.REGS[dcd_rs] | CURRENT_STATE.REGS[dcd_rt]);
+		            break;
+                // set on less than
+                case SUBOP_SLT:
+                    if ((int32_t)CURRENT_STATE.REGS[dcd_rs]<(int32_t)CURRENT_STATE.REGS[dcd_rt])
+                        NEXT_STATE.REGS[dcd_rd] = 1;
+                    else
+                        NEXT_STATE.REGS[dcd_rd] = 0;
+                    break;
+                // move from Lo
+                // the contents of special register LO are loaded into general register rd
+                // $d = LO
+                case SUBOP_MFLO:
+                    NEXT_STATE.REGS[dcd_rd] = CURRENT_STATE.LO;
+                    break;
+                // move to Hi
+                // the contents of general register Rs are loaded into special register HI
+                // HI = $s
+                case SUBOP_MTHI:
+                    NEXT_STATE.HI = CURRENT_STATE.REGS[dcd_rs];
+                    break;
+                // DIV rs, rt
+                case SUBOP_DIV:
+                    if (dcd_rt == 0){
+                        fprintf(stderr, "can't divided by 0\n");
+                        exit(-1);
+                    }
+                    // Operation
+                    // hi = $s % $t
+                    NEXT_STATE.HI=((int32_t)CURRENT_STATE.REGS[dcd_rs] % (int32_t)CURRENT_STATE.REGS[dcd_rt]);
+                    // lo = $s / $t
+			        NEXT_STATE.LO=((int32_t)CURRENT_STATE.REGS[dcd_rs] / (int32_t)CURRENT_STATE.REGS[dcd_rt]);
+                    break;
+                /* ----------BONUS END----------*/
                 /* ----------PART I----------*/
                 case SUBOP_SLL:
                 //bitwise left-shift
@@ -179,7 +242,7 @@ void execute()
                 // EX) mfhi $2
                 // $2 = HI
                 case SUBOP_MFHI:
-                    NEXT_STATE.REGS[dcd_rd] = NEXT_STATE.HI;
+                    NEXT_STATE.REGS[dcd_rd] = CURRENT_STATE.HI;
                     break;
                 /*------- PART I---------*/
             }
@@ -276,11 +339,42 @@ void execute()
             virtualAddress = dcd_se_imm + CURRENT_STATE.REGS[dcd_rs];
             mem_write_32(virtualAddress, (int)CURRENT_STATE.REGS[dcd_rt]);
             // if either of the two least-significant bits of the effective address are non-zero,
-            // and address error exception occurs
+            // and address error exception occurs        
+            break;
+        /*---------PART II END---------*/
 
+        /*-------BONUS--------*/
+        // set on less than immediate
+        // $t = ($s < sign extended immediate), either 1 or 0
+        case OP_SLTI:
+            if((int32_t)CURRENT_STATE.REGS[dcd_rs] < (int32_t)dcd_se_imm)
+                NEXT_STATE.REGS[dcd_rt] = 1;
+            else 
+                NEXT_STATE.REGS[dcd_rt] = 0;
+            break;
+        // set on less than immediate unsigned
+        case OP_SLTIU:
+            if(CURRENT_STATE.REGS[dcd_rs] < dcd_se_imm)
+                NEXT_STATE.REGS[dcd_rt] = 1;
+            else
+                NEXT_STATE.REGS[dcd_rt] = 0;
+            break;
+        // branch on less than Or equal to zero
+        // if ($s <= 0) pc += i << 2
+        case OP_BLEZ:
+            if(CURRENT_STATE.REGS[dcd_rs] <= 0){
+                NEXT_STATE.PC += (dcd_se_imm << 2);
+            }
+            break;
+        // branch on greater than Or equal to zero
+        // if ($s >= 0) pc += i << 2
+        case OP_BGEZ:
+            if(CURRENT_STATE.REGS[dcd_rs] >= 0){
+                NEXT_STATE.PC += (dcd_se_imm << 2);
+            }
             break;
         }
-
+        /*-------BONUS END--------*/
 
 
         
