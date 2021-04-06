@@ -1,5 +1,5 @@
 .text
-
+        addiu $12, 0xFFFFFFFF
 	# Store word aligned
         sw $12, 0($10)
 

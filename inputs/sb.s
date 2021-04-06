@@ -1,4 +1,5 @@
 .text
+        addiu $11, 0xFFFFFFFF
         # Store byte
         sb $11, 0($10)
 
