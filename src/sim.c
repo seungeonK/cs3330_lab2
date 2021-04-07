@@ -120,7 +120,7 @@ void execute()
 
     switch (dcd_op){
        case OP_BRANCH:
-            switch(dcd_funct){
+            switch(dcd_rt){
                 case BROP_BGEZ:
                     if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0)
                         NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
