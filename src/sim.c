@@ -266,8 +266,7 @@ void execute()
         // unconditionally jumps to this calculated address with a delay of one instruction
         // pc += i << 2
         case OP_J:
-            NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_target << 2);
-            // NEXT_STATE.PC = (dcd_target << 2) | (CURRENT_STATE.PC & 0xF0000000);
+            NEXT_STATE.PC = (dcd_target << 2) | (CURRENT_STATE.PC & 0xF0000000);
             break;
         // branch on equal
         // if($s == $t) -> pc += i << 2
@@ -275,9 +274,6 @@ void execute()
         case OP_BEQ:
             if (CURRENT_STATE.REGS[dcd_rs] == CURRENT_STATE.REGS[dcd_rt]){
                 NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
-            }
-            else{
-                NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
             break;
         // branch on not equal
@@ -364,14 +360,14 @@ void execute()
         // if ($s <= 0) pc += i << 2
         case OP_BLEZ:
             if(CURRENT_STATE.REGS[dcd_rs] <= 0){
-                NEXT_STATE.PC += (dcd_se_imm << 2);
+                NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
             }
             break;
         // branch on greater than Or equal to zero
         // if ($s >= 0) pc += i << 2
         case OP_BGEZ:
             if(CURRENT_STATE.REGS[dcd_rs] >= 0){
-                NEXT_STATE.PC += (dcd_se_imm << 2);
+                NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
             }
             break;
         }
