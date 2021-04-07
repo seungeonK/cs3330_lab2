@@ -56,7 +56,7 @@
 #define SUBOP_MFLO 0x12
 #define SUBOP_MTHI 0x11
 #define SUBOP_DIV 0x1a
-#define BROP_BLEZ 0x06
+#define OP_BLEZ 0x06
 #define BROP_BGEZ 0x01
 /*-------10 additional instructions---------*/
 
@@ -365,11 +365,11 @@ void execute()
             break;
         // branch on less than Or equal to zero
         // if ($s <= 0) pc += i << 2
-        // case OP_BLEZ:
-        //     if(CURRENT_STATE.REGS[dcd_rs] <= 0){
-        //         NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
-        //     }
-        //     break;
+        case OP_BLEZ:
+            if((int32_t)CURRENT_STATE.REGS[dcd_rs] <= 0){
+                NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
+            }
+            break;
         // branch on greater than Or equal to zero
         // if ($s >= 0) pc += i << 2
         // case OP_BGEZ:
