@@ -13,3 +13,5 @@ Bonus Instructions:
 9.  BLEZ
 10. BGTZ
 11. BGEZ
+12. SLTI
+13. SLTIU
