@@ -7,6 +7,7 @@
 #include "shell.h"
 #include <stdlib.h>
 #define OP_SPECIAL 0x00
+#define OP_BRANCH 0x01
 #define SUBOP_ADD 0x20
 #define SUBOP_ADDU 0x21
 #define OP_ADDI 0x08
@@ -55,8 +56,8 @@
 #define SUBOP_MFLO 0x12
 #define SUBOP_MTHI 0x11
 #define SUBOP_DIV 0x1a
-#define OP_BLEZ 0x06
-#define OP_BGEZ 0x01
+#define BROP_BLEZ 0x06
+#define BROP_BGEZ 0x01
 /*-------10 additional instructions---------*/
 
 
@@ -118,7 +119,14 @@ void execute()
     CURRENT_STATE.REGS[0] = 0;
 
     switch (dcd_op)
-    {
+    {   case OP_BRANCH:
+            switch(dcd_funct){
+                case BROP_BGEZ:
+                    if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0){
+                    NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
+                }
+            break;
+            }
         case OP_SPECIAL:
             switch (dcd_funct){
                 case SUBOP_ADD:
