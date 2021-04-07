@@ -25,7 +25,7 @@
 #define SUBOP_MULTU 0x19
 #define SUBOP_DIVU 0x1b
 // Comparision Instruction
-#define SUBOP_SLTU 0x29
+#define SUBOP_SLTU 0x2b
 // Data Movement Instruction
 #define SUBOP_MFHI 0x10
 
