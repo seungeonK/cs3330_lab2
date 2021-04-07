@@ -118,14 +118,13 @@ void execute()
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
     CURRENT_STATE.REGS[0] = 0;
 
-    switch (dcd_op)
-    {   case OP_BRANCH:
+    switch (dcd_op){
+       case OP_BRANCH:
             switch(dcd_funct){
                 case BROP_BGEZ:
-                    if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0){
-                    NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
-                }
-                break;
+                    if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0)
+                        NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
+                    break;
             }
         case OP_SPECIAL:
             switch (dcd_funct){
@@ -378,7 +377,7 @@ void execute()
         //         NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
         //     }
         //     break;
-        // }
+        }
         /*-------BONUS END--------*/
 
 
