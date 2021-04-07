@@ -11,5 +11,5 @@ Bonus Instructions:
 7. MTHI
 8.  DIV
 9.  BLEZ
-10. BLTZ
+10. BGTZ
 11. BGEZ
