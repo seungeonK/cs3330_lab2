@@ -124,8 +124,9 @@ void execute()
                 case BROP_BGEZ:
                     if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0){
                     NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
+                    break;
                 }
-            break;
+                break;
             }
         case OP_SPECIAL:
             switch (dcd_funct){
