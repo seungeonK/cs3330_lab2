@@ -7,11 +7,11 @@ addiu $2, $0, 10
 syscall
 
 nottaken:
-addiu $3, $0, 2
+addiu $10, $0, 2
 addiu $2, $0, 10
 syscall
 
 taken:
-addiu $3, $0, 3
+addiu $13, $0, 3
 addiu $2, $0, 10
 syscall
