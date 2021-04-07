@@ -366,19 +366,19 @@ void execute()
             break;
         // branch on less than Or equal to zero
         // if ($s <= 0) pc += i << 2
-        case OP_BLEZ:
-            if(CURRENT_STATE.REGS[dcd_rs] <= 0){
-                NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
-            }
-            break;
+        // case OP_BLEZ:
+        //     if(CURRENT_STATE.REGS[dcd_rs] <= 0){
+        //         NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
+        //     }
+        //     break;
         // branch on greater than Or equal to zero
         // if ($s >= 0) pc += i << 2
-        case OP_BGEZ:
-            if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0){
-                NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
-            }
-            break;
-        }
+        // case OP_BGEZ:
+        //     if((int32_t)CURRENT_STATE.REGS[dcd_rs] >= 0){
+        //         NEXT_STATE.PC = CURRENT_STATE.PC + (dcd_se_imm << 2);
+        //     }
+        //     break;
+        // }
         /*-------BONUS END--------*/
 
 
